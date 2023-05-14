@@ -3,6 +3,7 @@ import { Home } from "./pages/Home"
 import { PostDetails } from "./pages/PostDetails"
 import { RouterProvider } from "react-router-dom"
 import { Layout } from "./components/layouts/Layout"
+import { Users } from "./pages/Users"
 
 const router = createBrowserRouter([
   {
@@ -12,6 +13,10 @@ const router = createBrowserRouter([
       {
         path: "",
         element: <Home />
+      },
+      {
+        path: "/authors",
+        element: <Users />
       },
       {
         path: "/posts/:postId",
