@@ -6,14 +6,11 @@ export function Users() {
 
   useEffect(() => {
     async function fetchAuthors() {
-      setIsLoading(true);
       try {
         const response = await axios.get('http://localhost:3000/users');
         setAuthors(response.data)
       } catch (error) {
         console.error(error);
-      } finally {
-        setIsLoading(false)
       }
     }
 
