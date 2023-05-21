@@ -4,6 +4,7 @@ import { PostDetails } from "./pages/PostDetails"
 import { RouterProvider } from "react-router-dom"
 import { Layout } from "./components/layouts/Layout"
 import { Users } from "./pages/Users"
+import { QueryClientProvider, QueryClient} from '@tanstack/react-query'
 
 const router = createBrowserRouter([
   {
@@ -26,9 +27,13 @@ const router = createBrowserRouter([
   },
 ])
 
+const queryClient = new QueryClient();
+
 function App() {
   return (
-    <RouterProvider router={router} />
+    <QueryClientProvider client={queryClient}>
+      <RouterProvider router={router} />
+    </QueryClientProvider>
   )
 }
 
