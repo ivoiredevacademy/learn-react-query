@@ -2,6 +2,7 @@ import axios from "axios";
 import { Post } from "../components/Posts/Post";
 import { Spinner } from '../components/layouts/Spinner';
 import { useQuery } from '@tanstack/react-query';
+import { useAuthors } from "../hooks/useAuthors";
 
 const truncate = (str, length = 20) => str.substr(0, length, ) + '...';
 
@@ -12,9 +13,14 @@ export function Home() {
     queryFn: async () => {
       await new Promise((resolve) => setTimeout(resolve, 1000), )
       return axios.get('http://localhost:3000/posts?_limit=12&page=1')
-    }
+    },
   })
 
+  const { data: authors } = useAuthors();
+
+  function getAuthor(post) {
+    return authors?.data?.find((author) => author.id === post.userId)?.name || "Anonyme";
+  }
 
   if(result.status === 'loading') {
     return <div className="text-gray-500 text-center text-xl my-4">Loading...</div>
@@ -35,6 +41,9 @@ export function Home() {
                 title={truncate(post.title, 70)}
                 description={truncate(post.body, 200)}
               />
+              <small>
+                Ecrit par: { getAuthor(post) }
+              </small>
             </div>
           ))
         }

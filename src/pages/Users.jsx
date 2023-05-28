@@ -1,12 +1,8 @@
-import axios from "axios";
-import { useQuery } from '@tanstack/react-query';
+
+import { useAuthors } from "../hooks/useAuthors";
 
 export function Users() {
-  const { data: authors } = useQuery({
-    queryKey: ['users'],
-    queryFn: () => axios.get('http://localhost:3000/users'),
-    refetchOnWindowFocus: false
-  });
+  const { data: authors } = useAuthors();
 
   return (
     <div>
