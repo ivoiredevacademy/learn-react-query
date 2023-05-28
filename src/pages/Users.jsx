@@ -4,7 +4,8 @@ import { useQuery } from '@tanstack/react-query';
 export function Users() {
   const { data: authors } = useQuery({
     queryKey: ['users'],
-    queryFn: () => axios.get('http://localhost:3000/users')
+    queryFn: () => axios.get('http://localhost:3000/users'),
+    refetchOnWindowFocus: false
   });
 
   return (
