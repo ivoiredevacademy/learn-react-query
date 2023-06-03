@@ -6,5 +6,5 @@
 @tailwind utilities;
 
 .input {
-  @apply px-2 py-2 border border-gray-700 rounded;
+  @apply border-2 border-gray-300 px-2 py-2 outline-none rounded-lg focus:border-gray-500 transition-all duration-300 text-gray-700;
 }
