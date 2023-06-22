@@ -1,41 +1,24 @@
 import axios from "axios";
 import { Post } from "../components/Posts/Post";
 import { useState, createRef } from "react";
-import { useQuery } from '@tanstack/react-query';
 import { useAuthors } from "../hooks/useAuthors";
-
+import { usePosts } from "../hooks/usePosts";
+import { Link } from "react-router-dom";
 
 const truncate = (str, length = 20) => str.substr(0, length,) + '...';
 
 export function Home() {
   const inputRef = createRef();
   const [page, setPage] = useState(1);
-  const { error, data: posts, status, isError, refetch } = useQuery({
-    queryKey: ['posts', { page }],
-    queryFn: async () => {
-      let url = `http://localhost:3000/posts?_limit=15&_page=${page}`;
-      if (inputRef?.current?.value) {
-        url += `&title_like=${inputRef?.current?.value}`;
-      }
-      return axios.get(url)
-    },
-    cacheTime: 30000,
-    keepPreviousData: true,
-    retry: 1
+  const { error, data: posts, status, isError, refetch } = usePosts({
+    page,
+    searchTerm: inputRef?.current?.value,
   })
 
   const { data: authors } = useAuthors();
 
   function getAuthor(post) {
     return authors?.data?.find((author) => author.id === post.userId)?.name || "Anonyme";
-  }
-
-  if (status === 'loading') {
-    return <div className="text-gray-500 text-center text-xl my-4">Loading...</div>
-  }
-
-  if (isError) {
-    return <div className="text-red-500 text-center text-xl my-4">{error.message}</div>
   }
 
   function fetchMoreArticles() {
@@ -64,6 +47,14 @@ export function Home() {
   }
 
 
+  if (status === 'loading') {
+    return <div className="text-gray-500 text-center text-xl my-4">Loading...</div>
+  }
+
+  if (isError) {
+    return <div className="text-red-500 text-center text-xl my-4">{error.message}</div>
+  }
+
   const hasNextPages = posts?.data?.length === 15;
   const hasPreviousPages = page > 1;
 
@@ -84,13 +75,15 @@ export function Home() {
         {
           posts?.data.map((post) => (
             <div className="w-1/3 px-8 my-8" key={post.id}>
-              <Post
-                title={truncate(post.title, 70)}
-                description={truncate(post.body, 200)}
-              />
-              <small>
-                Ecrit par: {getAuthor(post)}
-              </small>
+              <Link to={`/posts/${post.id}`}>
+                <Post
+                  title={truncate(post.title, 70)}
+                  description={truncate(post.body, 200)}
+                />
+                <small>
+                  Ecrit par: {getAuthor(post)}
+                </small>
+              </Link>
             </div>
           ))
         }
@@ -110,7 +103,6 @@ export function Home() {
             </button>
           }
         </div>
-
 
         {hasNextPages &&
           <button
