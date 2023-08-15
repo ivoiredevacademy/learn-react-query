@@ -10,9 +10,10 @@ const truncate = (str, length = 20) => str.substr(0, length,) + '...';
 export function Home() {
   const inputRef = createRef();
   const [page, setPage] = useState(1);
+  const [searchTerm, setSearchTerm] = useState("")
   const { error, data: posts, status, isError, refetch } = usePosts({
     page,
-    searchTerm: inputRef?.current?.value,
+    searchTerm
   })
 
   const { data: authors } = useAuthors();
@@ -36,14 +37,8 @@ export function Home() {
   }
 
   function handleSearchChange(event) {
-    if (inputRef?.current?.value.length === 0) {
-      refetch();
-      return;
-    }
-
-    if (event.key === 'Enter' && inputRef.current.value.length > 3) {
-      refetch();
-    }
+    setSearchTerm(inputRef.current.value)
+    refetch();
   }
 
 

@@ -5,6 +5,8 @@ export function usePosts({ page, searchTerm }) {
   return useQuery({
     queryKey: ['posts', { page }],
     queryFn: async () => {
+      console.log(searchTerm)
+
       let url = `http://localhost:3000/posts?_limit=15&_page=${page}`;
       if (searchTerm) {
         url += `&title_like=${searchTerm}`;

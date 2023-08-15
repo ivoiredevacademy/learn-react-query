@@ -7,7 +7,6 @@ export function Comment({ comment }) {
         <p>
           {comment.body}
         </p>
-
       </div>
     </div>
   )
